@@ -1,5 +1,7 @@
 <script setup>
 import HelloWorld from './components/HelloWorld.vue'
+import { ref } from 'vue';
+const user = ref('');
 </script>
 
 <template>
@@ -7,12 +9,12 @@ import HelloWorld from './components/HelloWorld.vue'
     <img src="../img/Steam_icon_logo.svg.png">
     <h1 class="Title">Completed Steam games card creator</h1>
     <p class="subTitle">Custom made cards for your completed games!</p>
-    <input type="Title" class="Search" placeholder="Enter your Steam profile URL or custom ID">
+    <input type="text" class="Search" placeholder="Enter your Steam profile URL or custom ID" v-model="user">
     <button>Check your cards</button>
   </div>
 </template>
 
-<style scoped>
+<style>
 @import url('https://fonts.googleapis.com/css2?family=Assistant:wght@200..800&family=Chau+Philomene+One:ital@0;1&display=swap');
 
 /* .SteamLogo{
@@ -73,5 +75,30 @@ import HelloWorld from './components/HelloWorld.vue'
 }
 .teste{
   background-color: red;
+}
+body {
+  margin: 0;
+  display: flex;
+  place-items: center;
+  min-width: 320px;
+  min-height: 100vh;
+  background-color: #000000;
+  background-image: url('/img/bg.png');
+  background-size: cover;
+  background-repeat: no-repeat;
+}
+body::after{
+  content: "";
+  position: absolute;
+  inset: 0;
+  background-color: rgba(0, 0, 0, 0.5);
+  z-index: -1;
+}
+body::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  background-color: rgba(42, 71, 94, 0.9);
+  z-index: -1;
 }
 </style>
