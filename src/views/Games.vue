@@ -3,9 +3,9 @@
 </script>
 
 <template>
-  <router-view />
+    <h1>teste</h1>
 </template>
 
-<style>
+<style lang="scss">
 
 </style>
