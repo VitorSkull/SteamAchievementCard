@@ -49,25 +49,21 @@ public class SteamService {
             return path.substring(path.lastIndexOf("/") + 1);
         }
 
-        if (path.contains("/id/")) {
+        String vanity = lastSegment;
 
-            String vanity = lastSegment;
+        String url = "https://api.steampowered.com/ISteamUser/ResolveVanityURL/v1/"
+                + "?key=" + apiKey
+                + "&vanityurl=" + vanity;
 
-            String url = "https://api.steampowered.com/ISteamUser/ResolveVanityURL/v1/"
-                    + "?key=" + apiKey
-                    + "&vanityurl=" + vanity;
+        VanityResponse response =
+                restTemplate.getForObject(url, VanityResponse.class);
 
-            VanityResponse response =
-                    restTemplate.getForObject(url, VanityResponse.class);
+        if (response == null ||
+            response.getResponse() == null ||
+            response.getResponse().getSteamid() == null) {
 
-            if (response == null ||
-                response.getResponse() == null ||
-                response.getResponse().getSteamid() == null) {
-
-                throw new RuntimeException("Invalid Vanity or SteamID");
-            }
-            return response.getResponse().getSteamid();
+            throw new RuntimeException("Invalid Vanity or SteamID");
         }
-        return path;
+        return response.getResponse().getSteamid();
     }
 }

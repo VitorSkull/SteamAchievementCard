@@ -32,6 +32,7 @@ public class GamesController {
             }
             return ResponseEntity.ok(user);
         } catch (Exception e){
+            e.printStackTrace();
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
                     .body(Map.of("message", "Cannot reach user data",
                      "error", e.getMessage()));
