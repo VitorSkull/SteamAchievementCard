@@ -1,6 +1,8 @@
 <script setup>
 import { ref } from 'vue';
-const user = ref('');
+import { useUserStore } from '../stores/userStore'
+
+const userStore = useUserStore()
 const prox = ref(false)
 
 const toggle = () => {
@@ -14,8 +16,8 @@ const toggle = () => {
     <img src="../../img/Steam_icon_logo.svg.png">
     <h1 class="Title">Completed Steam games card creator</h1>
     <p class="subTitle">Custom made cards for your completed games!</p>
-    <input type="text" class="Search" placeholder="Enter your Steam profile URL or custom ID" v-model="user">
-    <button @click="user != ''? $router.push('/Games') : null">Check your cards</button>
+    <input type="text" class="Search" placeholder="Enter your Steam profile URL or custom ID" v-model="userStore.steamInput">
+    <button @click="userStore.steamInput != ''? $router.push('/Games') : null">Check your cards</button>
   </div>
 </template>
 
