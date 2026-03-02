@@ -7,6 +7,8 @@ import com.SteamAchievementCard.Model.SteamResponse;
 import com.SteamAchievementCard.Model.UserModel;
 import com.SteamAchievementCard.Model.VanityResponse;
 
+import java.net.URI;
+
 import org.springframework.beans.factory.annotation.Value;
 
 @Service
@@ -30,18 +32,26 @@ public class SteamService {
     }
 
     private String resolveSteamId(String input) {
+        input = input.trim();
 
-        if (input.matches("\\d+")) {
-            return input;
+        String path;
+
+        try {
+            path = URI.create(input).getPath();
+        } catch (Exception e) {
+            path = input;
         }
 
-        if (input.contains("/profiles/")) {
-            return input.substring(input.lastIndexOf("/") + 1);
+        path = path.replaceAll("/+$", "");
+        String lastSegment = path.replaceAll(".*/", "");
+
+        if (path.contains("/profiles/")) {
+            return path.substring(path.lastIndexOf("/") + 1);
         }
 
-        if (input.contains("/id/")) {
+        if (path.contains("/id/")) {
 
-            String vanity = input.substring(input.lastIndexOf("/") + 1);
+            String vanity = lastSegment;
 
             String url = "https://api.steampowered.com/ISteamUser/ResolveVanityURL/v1/"
                     + "?key=" + apiKey
@@ -50,9 +60,14 @@ public class SteamService {
             VanityResponse response =
                     restTemplate.getForObject(url, VanityResponse.class);
 
+            if (response == null ||
+                response.getResponse() == null ||
+                response.getResponse().getSteamid() == null) {
+
+                throw new RuntimeException("Invalid Vanity or SteamID");
+            }
             return response.getResponse().getSteamid();
         }
-
-        return input;
+        return path;
     }
 }
